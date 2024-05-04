@@ -8,8 +8,11 @@ const authOptions: NextAuthOptions = {
     GithubProvider({
       clientId: process.env.GITHUB_ID ?? "",
       clientSecret: process.env.GITHUB_SECRET ?? "",
+      
     }),
+        
   ],
+    
   callbacks: {
     async signIn({ user, account, profile }) {
       if (account?.provider === "github") {
@@ -42,7 +45,9 @@ const authOptions: NextAuthOptions = {
       return session;
     },
   },
+
 };
+
 
 const handler = NextAuth(authOptions);
 
