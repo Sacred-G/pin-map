@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import Map, {
   NavigationControl,
   GeolocateControl,
@@ -37,7 +37,7 @@ export default function MapComponent() {
   const searchParams = useSearchParams();
   const [pinsData, setPinsData] = useState([]);
 
-  const fetchPins = async () => {
+  const fetchPins = useCallback(async () => {
     setIsLoading(true);
     try {
       const category = searchParams.get("category");
@@ -49,19 +49,19 @@ export default function MapComponent() {
       console.error(error);
     }
     setIsLoading(false);
-  };
+  }, [searchParams]);
 
   useEffect(() => {
     setPinsData([]);
     fetchPins();
-  }, [searchParams]);
+   }, [searchParams, fetchPins]); // Include fetchPins in the dependency array
 
   const geoControlRef = useRef<maplibregl.GeolocateControl | null>(null);
 
   useEffect(() => {
     // make geolocate trigger on load
     geoControlRef.current?.trigger();
-  }, [geoControlRef.current]);
+  }, []);
 
   return (
     <>
